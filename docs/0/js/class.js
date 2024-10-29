@@ -30,7 +30,6 @@ class Class {
 //        this._privateFields = []
 //        this._protectedFields = []
     }
-    make() { return new Function(`return class ${this._name} ${this._extend} {${this._body}}`)
     static of(name, extend) {
         if (!Type.isStr(name) && !Type.isCls(name)) {throw new TypeError(`name は 必須であり、文字列またはクラスのみ有効です。`)}
         if (!Type.isStr(extend) && !Type.isCls(extend) && false!==!!extend) {throw new TypeError(`extend は 文字列またはクラスのみ有効です。不要なときはFalsy値にしてください。（null,undefined,false,0,''等）`)}
@@ -38,6 +37,7 @@ class Class {
         const E = !!extend ? (Type.isCls(name) ? name.constructor.name : (Type.isStr(extend) ? extend : '')) : ''
         return new Class(N, 0 < E.length ? `extends ${E}` : E)
     }
+    make() { return new Function(`return class ${this._name} ${this._extend} {${this._body}}`)() }
     f(name, value=null) {
         if (!Type.isStr(name)) {throw new TypeError(`name は 必須であり、文字列のみ有効です。`)}
         if (this._fields.has(name)) {throw new TypeError(`name=${name} は既存です。同名は一度のみ定義可能です。`)}
@@ -45,4 +45,5 @@ class Class {
         return this
     }
 }
+window.Class = Class
 })();
